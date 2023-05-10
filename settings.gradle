@@ -1,0 +1,8 @@
+rootProject.name="insurance"
+
+include "application:adapter"
+include "application:configuration"
+include "application:core"
+include "application:periphery:data"
+include "application:periphery:web"
+include "test:integration-test"
