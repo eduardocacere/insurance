@@ -3,7 +3,6 @@ project("application") {
 
 	dependencies {
 		compile project(':application:configuration')
-
 		optional ("org.springframework.boot:spring-boot-devtools")
 	}
 
@@ -13,7 +12,7 @@ project("application") {
 		buildInfo {
 			properties {
 				additional = [
-                        'description': "${description}"
+						'description': "${description}"
 				]
 			}
 		}
@@ -31,6 +30,12 @@ project("application:adapter") {
 	dependencies {
 		compile project(':application:core')
 
+		compileOnly 'org.projectlombok:lombok:1.18.26'
+		annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+		testCompileOnly 'org.projectlombok:lombok:1.18.26'
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+
 		compile ("com.fasterxml.jackson.core:jackson-core:${versions.jackson}")
 		compile ("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
 		compile ("org.apache.commons:commons-lang3:${versions.commonsLang}")
@@ -39,14 +44,40 @@ project("application:adapter") {
 	}
 }
 
+project("application:adapter-database") {
+	description = "Application adapter database"
+
+	dependencies {
+
+		compile project(':application:core')
+
+		compileOnly 'org.projectlombok:lombok:1.18.26'
+		annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+		testCompileOnly 'org.projectlombok:lombok:1.18.26'
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+		compile("org.springframework.boot:spring-boot-starter-data-jpa")
+		compile('org.springframework.boot:spring-boot-starter-actuator')
+		compile("org.apache.commons:commons-lang3:${versions.commonsLang}")
+		compile("javax.xml.bind:jaxb-api:${versions.jaxb}")
+
+		testCompile app_tests.unit_test
+	}
+}
+
+
 project("application:configuration") {
 	description = "Application configuration"
 
 	dependencies {
 		compile project(':application:adapter')
+		compile project(':application:adapter-database')
+
 		compile project(':application:core')
 		compile project(':application:periphery:data')
 		compile project(':application:periphery:web')
+
 
 		compile ('org.springframework.boot:spring-boot-starter-aop')
 		compile ('org.springframework.retry:spring-retry')
@@ -58,7 +89,7 @@ project("application:configuration") {
 		compile ("org.codehaus.janino:janino:${log_versions.janino}")
 		compile ("org.apache.commons:commons-lang3:${versions.commonsLang}")
 
-        testCompile app_tests.unit_test
+		testCompile app_tests.unit_test
 	}
 }
 
@@ -66,11 +97,10 @@ project("application:core") {
 	description = "Application core"
 
 	dependencies {
+
 		compile group: 'com.google.code.findbugs', name: 'jsr305', version: "${versions.nullableJsr305}"
 		compile group: 'com.google.guava', name: 'guava', version: "${versions.guava}"
 		compile group: 'org.apache.commons', name: 'commons-lang3', version: "${versions.commonsLang}"
-
-		provided group: 'org.immutables', name: 'value', version: "${versions.immutables}"
 
 		testCompile app_tests.unit_test
 	}
@@ -103,7 +133,7 @@ project("application:periphery:web") {
 		compile("org.springframework.boot:spring-boot-starter-hateoas")
 		compile("org.springframework.boot:spring-boot-starter-aop")
 		compile("org.springframework.data:spring-data-rest-hal-browser")
-        compile('org.springframework.boot:spring-boot-starter-actuator')
+		compile('org.springframework.boot:spring-boot-starter-actuator')
 
 		testCompile app_tests.unit_test
 	}

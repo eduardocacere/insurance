@@ -1,6 +1,7 @@
 rootProject.name="insurance"
 
 include "application:adapter"
+include "application:adapter-database"
 include "application:configuration"
 include "application:core"
 include "application:periphery:data"

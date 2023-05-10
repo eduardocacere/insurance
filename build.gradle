@@ -12,6 +12,7 @@ buildscript {
 		maven { url "https://repo.spring.io/milestone" }
 	}
 	dependencies {
+
 		classpath ("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath ("io.spring.gradle:propdeps-plugin:${propDepsVersion}")
 	}
@@ -35,8 +36,6 @@ configure(allprojects) {
 	apply plugin: 'propdeps-maven'
 	apply plugin: 'propdeps-idea'
 	apply plugin: 'propdeps-eclipse'
-
-	//apply plugin: 'checkstyle'
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
