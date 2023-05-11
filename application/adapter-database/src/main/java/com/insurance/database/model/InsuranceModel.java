@@ -24,6 +24,12 @@ public class InsuranceModel {
     @Column()
     private String uuid;
 
+    @Column(name = "value_budget")
+    private Double valueBudget;
+
+    @Column(name = "percent_budget")
+    private int percentBudget;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerModel customerModel;
@@ -46,6 +52,8 @@ public class InsuranceModel {
                 .builder()
                 .id(id)
                 .uuid(uuid)
+                .percentBudget(percentBudget)
+                .valueBudget(valueBudget)
                 .carModel(carModel.toEntity())
                 .isActive(isActive)
                 .creationDate(creationDate)

@@ -21,11 +21,23 @@ public class InsuranceController {
         this.service = insuranceAdapterService;
     }
 
-
     @PostMapping
     public ResponseEntity<InsuranceResponseDto> create(@RequestBody InsuranceRequestDto requestDto) throws Exception {
         return ResponseEntity.ok().body(this.service.create(requestDto));
     }
 
+    @GetMapping("/{insuranceId}")
+    public ResponseEntity<InsuranceResponseDto> getInsurance(@PathVariable String insuranceId) throws Exception {
+        return ResponseEntity.ok().body(this.service.getInsurance(insuranceId));
+    }
 
+    @PutMapping("/{insuranceId}")
+    public ResponseEntity<InsuranceResponseDto> update(@RequestBody InsuranceRequestDto requestDto, @PathVariable String insuranceId) throws Exception {
+        return ResponseEntity.ok().body(this.service.update(requestDto, insuranceId));
+    }
+
+    @DeleteMapping("/{insuranceId}")
+    public ResponseEntity<InsuranceResponseDto> delete(@PathVariable String insuranceId) throws Exception {
+        return ResponseEntity.ok().body(this.service.delete(insuranceId));
+    }
 }

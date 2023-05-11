@@ -11,6 +11,8 @@ public class InsuranceEntity {
 
     private Long id;
     private String uuid;
+    private Double valueBudget;
+    private int percentBudget;
     private CustomerEntity customerModel;
     private CarEntity carModel;
     private Boolean isActive;

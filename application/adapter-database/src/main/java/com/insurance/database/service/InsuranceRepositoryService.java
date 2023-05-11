@@ -2,6 +2,7 @@ package com.insurance.database.service;
 
 import com.insurance.config.adapter.web.persistence.InsurancePersistenceService;
 import com.insurance.config.data.entity.InsuranceEntity;
+import com.insurance.database.exception.DataBaseException;
 import com.insurance.database.model.CarModel;
 import com.insurance.database.model.CustomerModel;
 import com.insurance.database.model.InsuranceModel;
@@ -41,8 +42,15 @@ public class InsuranceRepositoryService implements InsurancePersistenceService {
                     .uuid(UUID.randomUUID().toString())
                     .carModel(optionalCarModel.get())
                     .customerModel(optionalCustomer.get())
+                    .valueBudget(insuranceEntity.getValueBudget())
+                    .percentBudget(insuranceEntity.getPercentBudget())
                     .isActive(true)
                     .creationDate(LocalDateTime.now())
                 .build()).toEntity();
+    }
+
+    @Override
+    public InsuranceEntity findInsurance(String insuranceId) throws DataBaseException {
+        return this.insuranceRepository.findByUuid(insuranceId).map(InsuranceModel::toEntity).orElseThrow(() -> new DataBaseException("Orçamento não encontrado."));
     }
 }

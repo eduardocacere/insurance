@@ -60,6 +60,27 @@ public class InsuranceUseCase implements InsuranceAdapterService {
 
     }
 
+    @Override
+    public InsuranceResponseDto getInsurance(String insuranceId) throws Exception {
+        InsuranceEntity insurance = this.insurancePersistenceService.findInsurance(insuranceId);
+        return InsuranceResponseDto
+                .builder()
+                .insuranceId(insurance.getUuid())
+                .percentBudget(insurance.getPercentBudget())
+                .valueBudget(insurance.getValueBudget())
+                .build();
+    }
+
+    @Override
+    public InsuranceResponseDto update(InsuranceRequestDto requestDto, String insuranceId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public InsuranceResponseDto delete(String insuranceId) throws Exception {
+        return null;
+    }
+
     private InsuranceResponseDto processDriver(DriverRequestDto driver, InsuranceRequestDto insuranceRequest, CustomerEntity customer) throws InsuranceException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate birthdate = LocalDate.parse(driver.getBirthdate(), formatter);
@@ -84,14 +105,17 @@ public class InsuranceUseCase implements InsuranceAdapterService {
                         .build()
         );
 
+        InsuranceResponseDto insurance = this.engineInsurance(driverEntiry, carEntity, carDriverEntity);
+
         InsuranceEntity insuranceEntity = this.insurancePersistenceService.create(InsuranceEntity
                 .builder()
                 .carModel(carEntity)
                 .customerModel(customer)
+                .percentBudget(insurance.getPercentBudget())
+                .valueBudget(insurance.getValueBudget())
                 .build());
 
-        InsuranceResponseDto insurance = this.engineInsurance(driverEntiry, carEntity, carDriverEntity);
-        insurance.setRequestId(insuranceEntity.getUuid());
+        insurance.setInsuranceId(insuranceEntity.getUuid());
         return insurance;
     }
 
