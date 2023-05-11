@@ -8,7 +8,9 @@ import lombok.Data;
 @Builder
 public class InsuranceResponseDto {
 
-    private Float valueBudget;
+    private String requestId;
+
+    private Double valueBudget;
 
     private int percentBudget;
 }

@@ -5,5 +5,5 @@ import com.insurance.config.adapter.web.response.InsuranceResponseDto;
 
 public interface InsuranceAdapterService {
 
-    InsuranceResponseDto create(InsuranceRequestDto insuranceRequest);
+    InsuranceResponseDto create(InsuranceRequestDto insuranceRequest) throws Exception;
 }

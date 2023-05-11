@@ -35,6 +35,8 @@ spring:
     console:
       path: /h2-console
       enabled: true
+  jackson:
+    date-format: dd/MM/YYYY
 
 springdoc:
   swagger-ui:

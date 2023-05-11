@@ -8,7 +8,8 @@ import java.util.List;
 public class InsuranceRequestDto {
 
     private String nameCustomer;
-    private List<DriverRequestDto> driver;
+    private String documentCustomer;
+    private DriverRequestDto driver;
     private CarRequestDto car;
 
 }

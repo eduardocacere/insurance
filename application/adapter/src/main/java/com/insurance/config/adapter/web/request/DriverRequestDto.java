@@ -1,5 +1,7 @@
 package com.insurance.config.adapter.web.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,7 +10,8 @@ import java.time.LocalDate;
 public class DriverRequestDto {
 
     private String document;
-    private LocalDate birthdate;
+
+    private String birthdate;
 
     private Boolean isMainDriver;
 }

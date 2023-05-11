@@ -39,6 +39,8 @@ project("application:adapter") {
 		compile ("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
 		compile ("org.apache.commons:commons-lang3:${versions.commonsLang}")
 
+		compile project(":application:periphery:data")
+
 		testCompile app_tests.unit_test
 	}
 }
@@ -47,6 +49,9 @@ project("application:adapter-database") {
 	description = "Application adapter database"
 
 	dependencies {
+
+		compile project(":application:periphery:data")
+		compile project(':application:adapter')
 
 		compileOnly 'org.projectlombok:lombok:1.18.26'
 		annotationProcessor 'org.projectlombok:lombok:1.18.26'
@@ -68,6 +73,7 @@ project("application:configuration") {
 	description = "Application configuration"
 
 	dependencies {
+
 		compile project(':application:adapter')
 		compile project(':application:adapter-database')
 
@@ -85,6 +91,14 @@ project("application:configuration") {
 		compile ("net.logstash.logback:logstash-logback-encoder:${log_versions.logstashLogback}")
 		compile ("org.codehaus.janino:janino:${log_versions.janino}")
 		compile ("org.apache.commons:commons-lang3:${versions.commonsLang}")
+
+		compile project(":application:periphery:data")
+
+		compileOnly 'org.projectlombok:lombok:1.18.26'
+		annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+		testCompileOnly 'org.projectlombok:lombok:1.18.26'
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
 		testCompile app_tests.unit_test
 	}
@@ -110,10 +124,15 @@ project("application:periphery:data") {
 
 	dependencies {
 
-		compile("org.springframework.boot:spring-boot-starter-data-jpa")
-		compile('org.springframework.boot:spring-boot-starter-actuator')
 		compile("org.apache.commons:commons-lang3:${versions.commonsLang}")
 		compile("javax.xml.bind:jaxb-api:${versions.jaxb}")
+
+		compileOnly 'org.projectlombok:lombok:1.18.26'
+		annotationProcessor 'org.projectlombok:lombok:1.18.26'
+
+		testCompileOnly 'org.projectlombok:lombok:1.18.26'
+		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+
 
 		testCompile app_tests.unit_test
 	}
@@ -132,6 +151,9 @@ project("application:periphery:web") {
 		compile("org.springframework.boot:spring-boot-starter-aop")
 		compile("org.springframework.data:spring-data-rest-hal-browser")
 		compile('org.springframework.boot:spring-boot-starter-actuator')
+
+		compile("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
+		compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${versions.jackson}")
 
 		testCompile app_tests.unit_test
 	}

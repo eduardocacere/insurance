@@ -1,5 +1,6 @@
 package com.insurance.config.adapter.web.request;
 
+import com.insurance.config.data.entity.CarEntity;
 import lombok.Data;
 
 @Data
@@ -9,7 +10,18 @@ public class CarRequestDto {
 
     private String manufacturer;
 
-    private String year;
+    private int year;
 
-    private String fipeValue;
+    private Float fipeValue;
+
+    public CarEntity toEntity() {
+        return CarEntity
+                .builder()
+                .model(model)
+                .manufacture(manufacturer)
+                .year(year)
+                .fipeValue(fipeValue)
+                .build();
+    }
+
 }

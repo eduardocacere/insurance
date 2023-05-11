@@ -23,7 +23,7 @@ public class InsuranceController {
 
 
     @PostMapping
-    public ResponseEntity<InsuranceResponseDto> create(@RequestBody InsuranceRequestDto requestDto) {
+    public ResponseEntity<InsuranceResponseDto> create(@RequestBody InsuranceRequestDto requestDto) throws Exception {
         return ResponseEntity.ok().body(this.service.create(requestDto));
     }
 
