@@ -28,7 +28,6 @@ project("application:adapter") {
 	description = "Application adapter"
 
 	dependencies {
-		compile project(':application:core')
 
 		compileOnly 'org.projectlombok:lombok:1.18.26'
 		annotationProcessor 'org.projectlombok:lombok:1.18.26'
@@ -48,8 +47,6 @@ project("application:adapter-database") {
 	description = "Application adapter database"
 
 	dependencies {
-
-		compile project(':application:core')
 
 		compileOnly 'org.projectlombok:lombok:1.18.26'
 		annotationProcessor 'org.projectlombok:lombok:1.18.26'
@@ -97,7 +94,9 @@ project("application:core") {
 	description = "Application core"
 
 	dependencies {
+		compile project(':application:adapter')
 
+		compile("org.springframework.boot:spring-boot-starter-data-jpa")
 		compile group: 'com.google.code.findbugs', name: 'jsr305', version: "${versions.nullableJsr305}"
 		compile group: 'com.google.guava', name: 'guava', version: "${versions.guava}"
 		compile group: 'org.apache.commons', name: 'commons-lang3', version: "${versions.commonsLang}"
@@ -110,7 +109,6 @@ project("application:periphery:data") {
 	description = "Application periphery data"
 
 	dependencies {
-		compile project(':application:core')
 
 		compile("org.springframework.boot:spring-boot-starter-data-jpa")
 		compile('org.springframework.boot:spring-boot-starter-actuator')

@@ -48,7 +48,7 @@ configure(allprojects) {
 
 }
 
-def frameworkAgnostic = [':application:core', ':application:adapter']
+def frameworkAgnostic = [':application:adapter']
 configure(subprojects - frameworkAgnostic.collect { project(it) }) {
 	apply plugin: 'io.spring.dependency-management'
 
