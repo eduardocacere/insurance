@@ -146,6 +146,7 @@ project("application:periphery:web") {
 
 		compile("com.fasterxml.uuid:java-uuid-generator:${versions.jug}")
 		compile("org.springdoc:springdoc-openapi-ui:1.7.0")
+		compile("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
 		compile("org.springframework.boot:spring-boot-starter-web")
 		compile("org.springframework.boot:spring-boot-starter-hateoas")
 		compile("org.springframework.boot:spring-boot-starter-aop")

@@ -10,7 +10,7 @@ This project aims at services related to car insurance quotes
 | core  | Should only need to look inside this package to know what the system does. Has no dependencies to any framework (e.g. Spring, hibernate, play, drop wizard…) |
 | core > domain | Entities and value objects |
 | core > usecase | The use cases (or application services) |
- |
+ 
 
 
 | Module     | Intent |
@@ -25,3 +25,17 @@ This project aims at services related to car insurance quotes
 
 This is the database diagram
 ![img.png](img.png)
+
+
+### Run the application
+On the command line in the insurance folder type **gradlew bootRun**
+
+**Application URL:** http://localhost:8080
+
+
+## REST documentation
+**URL:** http://localhost:8080/swagger-ui.html
+
+To see the Swagger documentation in read-only mode run the application with production profile  
+On windows: **gradlew bootRun**  
+On linux: **./gradlew bootRun**
