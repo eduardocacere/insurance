@@ -35,6 +35,9 @@ project("application:adapter") {
 		testCompileOnly 'org.projectlombok:lombok:1.18.26'
 		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
 
+		compile("org.springdoc:springdoc-openapi-ui:1.7.0")
+		compile("org.springdoc:springdoc-openapi-webmvc-core:1.7.0")
+
 		compile ("com.fasterxml.jackson.core:jackson-core:${versions.jackson}")
 		compile ("com.fasterxml.jackson.core:jackson-databind:${versions.jackson}")
 		compile ("org.apache.commons:commons-lang3:${versions.commonsLang}")
@@ -132,7 +135,6 @@ project("application:periphery:data") {
 
 		testCompileOnly 'org.projectlombok:lombok:1.18.26'
 		testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
-
 
 		testCompile app_tests.unit_test
 	}
