@@ -13,8 +13,8 @@ public class InsuranceEntity {
     private String uuid;
     private Double valueBudget;
     private int percentBudget;
-    private CustomerEntity customerModel;
-    private CarEntity carModel;
+    private CustomerEntity customer;
+    private CarEntity car;
     private Boolean isActive;
     private LocalDateTime creationDate;
     private LocalDateTime updatedDate;

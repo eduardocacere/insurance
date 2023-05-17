@@ -32,11 +32,11 @@ public class InsuranceModel {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private CustomerModel customerModel;
+    private CustomerModel customer;
 
     @ManyToOne
     @JoinColumn(name = "car_id", referencedColumnName = "id")
-    private CarModel carModel;
+    private CarModel car;
 
     @Column(name = "is_active")
     private Boolean isActive;
@@ -54,7 +54,8 @@ public class InsuranceModel {
                 .uuid(uuid)
                 .percentBudget(percentBudget)
                 .valueBudget(valueBudget)
-                .carModel(carModel.toEntity())
+                .customer(customer.toEntity())
+                .car(car.toEntity())
                 .isActive(isActive)
                 .creationDate(creationDate)
                 .updatedDate(updatedDate)

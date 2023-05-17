@@ -1,7 +1,11 @@
 package com.insurance.config.adapter.web.request;
 
+import com.insurance.config.data.entity.DriverEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class DriverRequestDto {
@@ -14,4 +18,18 @@ public class DriverRequestDto {
 
     @Schema(description = "Main Driver.", example = "true", required = true)
     private Boolean isMainDriver;
+
+    public LocalDate getBirthdateToDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(this.getBirthdate(), formatter);
+    }
+
+    public DriverEntity toEntity() {
+        return DriverEntity
+                .builder()
+                .document(document)
+                .birthdate(this.getBirthdateToDate())
+                .build();
+    }
+
 }

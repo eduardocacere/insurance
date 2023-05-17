@@ -27,7 +27,7 @@ import java.util.Optional;
 public class InsuranceUseCase implements InsuranceAdapterService {
     Logger logger = LoggerFactory.getLogger(InsuranceUseCase.class);
 
-    private CustomerPersistenceService persistenceService;
+    private CustomerPersistenceService customerPersistenceService;
     private DriverPersistenceService driverPersistenceService;
 
     private CarPersistenceService carPersistenceService;
@@ -37,13 +37,13 @@ public class InsuranceUseCase implements InsuranceAdapterService {
     private CarDriverPersistenceService carDriverPersistenceService;
     private InsurancePersistenceService insurancePersistenceService;
 
-    InsuranceUseCase(final CustomerPersistenceService persistenceService,
+    InsuranceUseCase(final CustomerPersistenceService customerPersistenceService,
                      final DriverPersistenceService driverPersistenceService,
                      final CarPersistenceService carPersistenceService,
                      final CarDriverPersistenceService carDriverPersistenceService,
                      final ClaimPersistenceService claimPersistenceService,
                      final InsurancePersistenceService insurancePersistenceService) {
-        this.persistenceService = persistenceService;
+        this.customerPersistenceService = customerPersistenceService;
         this.driverPersistenceService = driverPersistenceService;
         this.carPersistenceService = carPersistenceService;
         this.carDriverPersistenceService = carDriverPersistenceService;
@@ -54,9 +54,8 @@ public class InsuranceUseCase implements InsuranceAdapterService {
     public InsuranceResponseDto create(InsuranceRequestDto insuranceRequest) throws InsuranceException {
         logger.info("Criando o Insurance");
 
-        Optional<CustomerEntity> optionalCustomer = this.persistenceService.findCustomerByDocument(insuranceRequest.getDocumentCustomer());
-        CustomerEntity customer = this.createCustomerIfnotExist(optionalCustomer, insuranceRequest);
-        return this.processDriver(insuranceRequest.getDriver(), insuranceRequest, customer);
+
+        return this.processInsurance(insuranceRequest.getDriver(), insuranceRequest);
 
     }
 
@@ -72,8 +71,19 @@ public class InsuranceUseCase implements InsuranceAdapterService {
     }
 
     @Override
-    public InsuranceResponseDto update(InsuranceRequestDto requestDto, String insuranceId) throws Exception {
-        return null;
+    public InsuranceResponseDto update(InsuranceRequestDto request, String insuranceId) throws Exception {
+        InsuranceEntity insurance = this.insurancePersistenceService.findInsurance(insuranceId);
+        this.customerPersistenceService.update(insurance.getCustomer(), request);
+
+        this.carPersistenceService.update(insurance.getCar(), request.getCar());
+        this.driverPersistenceService.update(insurance.getCustomer().getDriver(), request.getDriver());
+
+        return InsuranceResponseDto
+                .builder()
+                .insuranceId(insurance.getUuid())
+                .percentBudget(insurance.getPercentBudget())
+                .valueBudget(insurance.getValueBudget())
+                .build();
     }
 
     @Override
@@ -81,7 +91,7 @@ public class InsuranceUseCase implements InsuranceAdapterService {
         return null;
     }
 
-    private InsuranceResponseDto processDriver(DriverRequestDto driver, InsuranceRequestDto insuranceRequest, CustomerEntity customer) throws InsuranceException {
+    private InsuranceResponseDto processInsurance(DriverRequestDto driver, InsuranceRequestDto insuranceRequest) throws InsuranceException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate birthdate = LocalDate.parse(driver.getBirthdate(), formatter);
 
@@ -94,6 +104,7 @@ public class InsuranceUseCase implements InsuranceAdapterService {
                         .manufacture(insuranceRequest.getCar().getManufacturer())
                         .year(insuranceRequest.getCar().getYear())
                         .fipeValue(insuranceRequest.getCar().getFipeValue())
+                        .plate(insuranceRequest.getCar().getPlate())
                     .build());
 
         CarDriverEntity carDriverEntity = this.carDriverPersistenceService.findOrCreate(
@@ -105,12 +116,16 @@ public class InsuranceUseCase implements InsuranceAdapterService {
                         .build()
         );
 
+        Optional<CustomerEntity> optionalCustomer = this.customerPersistenceService.findCustomerByDocument(insuranceRequest.getDocumentCustomer());
+        CustomerEntity customer = this.createCustomerIfnotExist(optionalCustomer, insuranceRequest, driverEntiry);
+
+
         InsuranceResponseDto insurance = this.engineInsurance(driverEntiry, carEntity, carDriverEntity);
 
         InsuranceEntity insuranceEntity = this.insurancePersistenceService.create(InsuranceEntity
                 .builder()
-                .carModel(carEntity)
-                .customerModel(customer)
+                .car(carEntity)
+                .customer(customer)
                 .percentBudget(insurance.getPercentBudget())
                 .valueBudget(insurance.getValueBudget())
                 .build());
@@ -198,8 +213,17 @@ public class InsuranceUseCase implements InsuranceAdapterService {
     }
 
 
-    private CustomerEntity createCustomerIfnotExist(Optional<CustomerEntity> optionalCustomer, InsuranceRequestDto insuranceRequest) {
-        return optionalCustomer.orElseGet(() -> this.persistenceService.create(insuranceRequest.getNameCustomer(), insuranceRequest.getDocumentCustomer()));
+    private CustomerEntity createCustomerIfnotExist(Optional<CustomerEntity> optionalCustomer,
+                                                    InsuranceRequestDto insuranceRequest,
+                                                    DriverEntity driverEntity) {
+        return optionalCustomer
+                .orElseGet(() -> {
+                    try {
+                        return this.customerPersistenceService.create(insuranceRequest.getNameCustomer(), insuranceRequest.getDocumentCustomer(), driverEntity);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
     }
 }

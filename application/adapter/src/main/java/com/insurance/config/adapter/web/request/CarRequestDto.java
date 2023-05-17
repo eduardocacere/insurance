@@ -19,6 +19,9 @@ public class CarRequestDto {
     @Schema(description = "Car Value Fipe.", example = "50000", required = true)
     private Float fipeValue;
 
+    @Schema(description = "Car plate.", example = "ABC1234", required = true)
+    private String plate;
+
     public CarEntity toEntity() {
         return CarEntity
                 .builder()
@@ -26,6 +29,7 @@ public class CarRequestDto {
                 .manufacture(manufacturer)
                 .year(year)
                 .fipeValue(fipeValue)
+                .plate(plate)
                 .build();
     }
 

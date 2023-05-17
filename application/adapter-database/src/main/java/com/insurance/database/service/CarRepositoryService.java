@@ -1,7 +1,9 @@
 package com.insurance.database.service;
 
 import com.insurance.config.adapter.web.persistence.CarPersistenceService;
+import com.insurance.config.adapter.web.request.CarRequestDto;
 import com.insurance.config.data.entity.CarEntity;
+import com.insurance.database.exception.DataBaseException;
 import com.insurance.database.model.CarModel;
 import com.insurance.database.repository.CarRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,24 @@ public class CarRepositoryService implements CarPersistenceService {
                 .manufacture(carModel.getManufacture())
                 .year(carModel.getYear())
                 .fipeValue(carModel.getFipeValue())
+                .plate(carModel.getPlate())
                 .build();
+    }
+
+    @Override
+    public CarEntity update(CarEntity carCurrent, CarRequestDto carUpdate) throws DataBaseException {
+        return this.carRepository.findById(carCurrent.getId())
+                .map(car -> this.updateCar(car, carUpdate))
+                .orElseThrow(() -> new DataBaseException("Carro não encontrado."));
+    }
+
+    private CarEntity updateCar(CarModel carModel, CarRequestDto carRequest) {
+        carModel.setModelCar(carRequest.getModel());
+        carModel.setManufacture(carRequest.getManufacturer());
+        carModel.setYear(carRequest.getYear());
+        carModel.setFipeValue(carRequest.getFipeValue());
+        carModel.setPlate(carRequest.getPlate());
+        return this.carRepository.save(carModel).toEntity();
     }
 
     private CarModel createCar(CarEntity car) {
@@ -42,6 +61,7 @@ public class CarRepositoryService implements CarPersistenceService {
                 .manufacture(car.getManufacture().toUpperCase())
                 .year(car.getYear())
                 .fipeValue(car.getFipeValue())
+                .plate(car.getPlate())
                 .build());
     }
 }

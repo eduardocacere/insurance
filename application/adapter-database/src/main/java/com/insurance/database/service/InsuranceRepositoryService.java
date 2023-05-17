@@ -33,15 +33,15 @@ public class InsuranceRepositoryService implements InsurancePersistenceService {
     }
     @Override
     public InsuranceEntity create(InsuranceEntity insuranceEntity) {
-        Optional<CustomerModel> optionalCustomer = this.customerRepository.findByDocument(insuranceEntity.getCustomerModel().getDocument());
+        Optional<CustomerModel> optionalCustomer = this.customerRepository.findByDocument(insuranceEntity.getCustomer().getDocument());
 
-        Optional<CarModel> optionalCarModel = this.carRepository.findById(insuranceEntity.getCarModel().getId());
+        Optional<CarModel> optionalCarModel = this.carRepository.findById(insuranceEntity.getCar().getId());
 
         return this.insuranceRepository.save(InsuranceModel
                 .builder()
                     .uuid(UUID.randomUUID().toString())
-                    .carModel(optionalCarModel.get())
-                    .customerModel(optionalCustomer.get())
+                    .car(optionalCarModel.get())
+                    .customer(optionalCustomer.get())
                     .valueBudget(insuranceEntity.getValueBudget())
                     .percentBudget(insuranceEntity.getPercentBudget())
                     .isActive(true)
@@ -51,6 +51,9 @@ public class InsuranceRepositoryService implements InsurancePersistenceService {
 
     @Override
     public InsuranceEntity findInsurance(String insuranceId) throws DataBaseException {
-        return this.insuranceRepository.findByUuid(insuranceId).map(InsuranceModel::toEntity).orElseThrow(() -> new DataBaseException("Orçamento não encontrado."));
+        return this.insuranceRepository
+                .findByUuid(insuranceId)
+                .map(InsuranceModel::toEntity)
+                .orElseThrow(() -> new DataBaseException("Orçamento não encontrado."));
     }
 }
